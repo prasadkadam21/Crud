@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Product_Management_System_DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProductTables" Relationship="Self.FK_dbo_Products_dbo_Categories_Category_ID" FromRole="Categories" ToRole="ProductTable" />
+  </EntityType>
+  <EntityType Name="ProductTable">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryID" Type="Int32" />
+    <NavigationProperty Name="Category" Relationship="Self.FK_dbo_Products_dbo_Categories_Category_ID" FromRole="ProductTable" ToRole="Categories" />
+  </EntityType>
+  <Association Name="FK_dbo_Products_dbo_Categories_Category_ID">
+    <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="ProductTable" Type="Self.ProductTable" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="CategoryID" />
+      </Principal>
+      <Dependent Role="ProductTable">
+        <PropertyRef Name="CategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Product_Management_System_DBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="ProductTables" EntityType="Self.ProductTable" />
+    <AssociationSet Name="FK_dbo_Products_dbo_Categories_Category_ID" Association="Self.FK_dbo_Products_dbo_Categories_Category_ID">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="ProductTable" EntitySet="ProductTables" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
